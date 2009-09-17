@@ -1,0 +1,26 @@
+Prerequisites:
+ - Java 1.6
+ - Ant
+ - Maven
+ - J/GAE
+
+To build:
+
+1. Edit build.xml and make sdk.dir point to your J/GAE install.
+2. Run mvn package
+3. Run ant
+
+This will give you a local instance running at:  http://localhost:9000/
+
+To deploy:
+
+$GAE_HOME/bin/appcfg.sh --email=account@youdomain.com update target/example-webhook
+
+To try it:
+
+$ curl http://taykt-demo.appspot.com/date -X POST -d text=Sydney
+It's 2009-09-17 06:21 in Eastern Standard Time (New South Wales)
+
+$ curl http://taykt-demo.appspot.com/echo -X POST -d text="Well hello" -d pid="42"
+42 sent Well hello
+

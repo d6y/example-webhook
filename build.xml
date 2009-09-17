@@ -1,0 +1,37 @@
+<project name="Guestbook" default="runserver">
+    <property name="sdk.dir" location="/Users/richard/Applications/gae/appengine-java-sdk-1.2.5"/>
+    <import file="${sdk.dir}/config/user/ant-macros.xml"/>
+    <property name="war.dir" value="target/example-webhook"/>
+	
+    <target name="runserver" description="Starts the development server.">
+        <!--many developer's workstation using port 8080, change the default port -->
+        <dev_appserver war="${war.dir}" port="9000"/>
+    </target>
+
+    <target name="update" description="Uploads the application to App Engine.">
+        <appcfg action="update" war="${war.dir}"/>
+    </target>
+
+    <target name="update_indexes" 
+            description="Uploads just the datastore index configuration to App Engine.">
+        <appcfg action="update_indexes" war="${war.dir}"/>
+    </target>
+
+    <target name="rollback" 
+            description="Rolls back an interrupted application update.">
+        <appcfg action="rollback" war="${war.dir}"/>
+    </target>
+
+    <target name="request_logs"
+            description="Downloads log data from App Engine for the application.">
+        <appcfg action="request_logs" war="${war.dir}">
+            <options>
+                <arg value="--num_days=5"/>
+            </options>
+            <args>
+                <arg value="logs.txt"/>
+            </args>
+        </appcfg>
+    </target>
+
+</project>
