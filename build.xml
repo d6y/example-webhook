@@ -1,10 +1,9 @@
 <project name="Guestbook" default="runserver">
-    <property name="sdk.dir" location="/Users/richard/Applications/gae/appengine-java-sdk-1.2.5"/>
+    <property name="sdk.dir" location="/Users/richard/Applications/gae/appengine-java-sdk-1.2.6"/>
     <import file="${sdk.dir}/config/user/ant-macros.xml"/>
     <property name="war.dir" value="target/example-webhook"/>
 	
     <target name="runserver" description="Starts the development server.">
-        <!--many developer's workstation using port 8080, change the default port -->
         <dev_appserver war="${war.dir}" port="9000"/>
     </target>
 

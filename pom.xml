@@ -4,9 +4,20 @@
   <groupId>com.taykt.api</groupId>
   <artifactId>example-webhook</artifactId>
   <packaging>war</packaging>
-  <version>1.0.0-SNAPSHOT</version>
-  <name>example-webhook JEE5 Webapp</name>
-  <url>http://maven.apache.org</url>
+  <version>1.0.1</version>
+  <name>example-webhook</name>
+  <description>Example web hooks for use with the Taykt API.</description>
+  <url>http://api.taykt.com/</url>
+  
+  <repositories>
+    <repository>
+      <id>scala-tools.org</id>
+      <name>Scala-Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-snapshots</url>
+    </repository>
+  </repositories>
+  
+  
   <dependencies>
 
     <dependency>
@@ -29,17 +40,74 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+	<dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>2.7.7</version>
+    </dependency>
+ 
+ 	<dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-compiler</artifactId>
+      <version>2.7.7</version>
+      <scope>test</scope>
+    </dependency>  
     
   </dependencies>
+  <inceptionYear>2009</inceptionYear>
+  <scm>
+  	<url>http://github.com/d6y/example-webhook</url>
+  </scm>
+  <organization>
+  	<name>Spiral Arm Ltd</name>
+  	<url>http://spiralarm.com</url>
+  </organization>
   <build>
     <plugins>
+    <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+        </configuration>
+      </plugin>
+    
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.0.2</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <downloadSources>true</downloadSources>
+          <excludes>
+            <exclude>org.scala-lang:scala-library</exclude>
+          </excludes>
+          <classpathContainers>
+            <classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+          </classpathContainers>
+          <projectnatures>
+            <java.lang.String>ch.epfl.lamp.sdt.core.scalanature</java.lang.String>
+            <java.lang.String>org.eclipse.jdt.core.javanature</java.lang.String>
+          </projectnatures>
+          <buildcommands>
+            <java.lang.String>ch.epfl.lamp.sdt.core.scalabuilder</java.lang.String>
+          </buildcommands>
         </configuration>
       </plugin>
     </plugins>

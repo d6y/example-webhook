@@ -2,7 +2,8 @@ Prerequisites:
  - Java 1.6
  - Ant
  - Maven
- - J/GAE
+ - J/GAE (tested against 1.2.6)
+ - Scala 2.7.x (or possibly later)
 
 To build:
 
@@ -10,11 +11,12 @@ To build:
 2. Run mvn package
 3. Run ant
 
-This will give you a local instance running at:  http://localhost:9000/
+This will give you a local instance running  http://localhost:9000/ which you can test
+with: curl http://127.0.0.1:9000/date -X POST -d text=Sydney
 
 To deploy:
 
-$GAE_HOME/bin/appcfg.sh --email=account@youdomain.com update target/example-webhook
+$GAE_HOME/bin/appcfg.sh --email=account@yourdomain.com update target/example-webhook
 
 To try it:
 
