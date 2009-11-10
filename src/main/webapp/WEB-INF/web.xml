@@ -12,6 +12,18 @@
         <servlet-name>date</servlet-name>
         <servlet-class>com.taykt.api.examples.webhook.DateServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>poll</servlet-name>
+        <servlet-class>com.taykt.api.examples.webhook.DefinedOptionsPollServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>open</servlet-name>
+        <servlet-class>com.taykt.api.examples.webhook.OpenPollServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>unique</servlet-name>
+        <servlet-class>com.taykt.api.examples.webhook.SingleVotePerMobilePollServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>date</servlet-name>
         <url-pattern>/date</url-pattern>
@@ -19,6 +31,18 @@
     <servlet-mapping>
         <servlet-name>echo</servlet-name>
         <url-pattern>/echo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>poll</servlet-name>
+        <url-pattern>/poll</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>open</servlet-name>
+        <url-pattern>/open</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>unique</servlet-name>
+        <url-pattern>/unique</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>/index.html</welcome-file>
