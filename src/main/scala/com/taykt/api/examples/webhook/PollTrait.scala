@@ -21,22 +21,15 @@ trait PollTrait  extends HttpServlet{
 		response.setContentType("text/html")
 
 		if (null == pollName) {
-			response.getWriter().println("<html><head><title>Poll results</title><body><p>You need to provide a poll name.</p></body></html>")
+			response.getWriter().println(NO_POLL)
 		} else {
 			polls.get(pollName) match {
 			  case Some(poll) =>
-			    val buffer = new StringBuffer()
-			    poll.foreach { entry => buffer.append("<tr><td>" +  entry._1+ "</td><td>" + entry._2 + "</td><tr>") }
-				response.getWriter().println(
-						"<html><head><title>Poll results for " + pollName
-								+ "</title><body><table>" + buffer.toString()
-								+ "</table><img src=\"" + chartUrl(poll)
-								+ "\"></body></html>")
+			    val table    = poll.map { entry => "<tr><td>" +  entry._1+ "</td><td>" + entry._2 + "</td><tr>" }.mkString
+			    response.getWriter().println(
+			      RESULTS_HTML.replaceAll("${POLL_NAME}",pollName).replaceAll("${RESULTS_TABLE}", table).replaceAll("${CHART_URL}",chartUrl(poll)))
 			  case None =>  
-				response.getWriter().println(
-								"<html><head><title>Poll results for " + pollName
-								+ "</title><body><p>No votes have been collected for the "
-								+ pollName + " poll yet.</p></body></html>")
+				response.getWriter().println(NO_RESULTS_HTML.replaceAll("${POLL_NAME}",pollName))
 			}
 		}
 	}
@@ -51,8 +44,10 @@ trait PollTrait  extends HttpServlet{
 			val pollOption:String = pollOptionFromString(request.getParameter("text"))
 			polls.get(pollName) match {
 			  case Some(poll) =>
-				if (poll.contains(pollOption)) poll += (pollOption -> (poll(pollOption) + 1))
-				else  						   poll += (pollOption -> 1)
+			    poll.get(pollOption) match {
+			      case Some(value)  => poll += (pollOption -> (value + 1))
+			      case None 		  => poll += (pollOption -> 1) 
+			    }
 			  case None => polls += (pollName -> Map(pollOption -> 1))
 			}
 			response.getWriter().println(sMSResponse(pollName, pollOption))
@@ -63,15 +58,41 @@ trait PollTrait  extends HttpServlet{
 
 	def chartUrl(poll:Map[String, Int] ) = "http://chart.apis.google.com/chart?cht=p3&chs=500x250&chd=t:" + poll.values.toList.mkString(",") + "&chl=" + poll.keys.toList.mkString("|")
 
- def sMSResponse(pollName:String , option:String ) = RESPONSE_TEXT.replace("{OPTION}", option).replace("{PERCENT}", percentage(polls(pollName), option)).replace("{LEADER}", leader(polls(pollName)))
+	def sMSResponse(pollName:String , option:String ) = RESPONSE_TEXT.replace("{OPTION}", option).replace("{PERCENT}", percentage(polls(pollName), option)).replace("{LEADER}", leader(polls(pollName)))
  
 	def percentage(poll:Map[String, Int] , option:String) = { (poll.get(option).get / total(poll).toDouble * 100).toString }
 
 	def total(poll:Map[String, Int] ):Int =  { (0 /: poll) ( _ + _._2 ) }
 
-	val RESPONSE_TEXT = "You've voted for {OPTION}. It has {PERCENT}% of the vote. Currently {LEADER} is in the lead."
-
   	def leader(poll:Map[String, Int] ) =  poll.toList.sort( (_._2 >_._2) )(0)._1  
 
+   	val RESPONSE_TEXT = "You've voted for {OPTION}. It has {PERCENT}% of the vote. Currently {LEADER} is in the lead."
+    
+    val NO_RESULTS_HTML = """<html>
+   	<head>
+   		<title>Poll results for ${POLL_NAME}</title>
+   	</head>
+   		<body>
+   			<p>No votes have been collected for the ${POLL_NAME} poll yet.</p>
+   		</body>
+</html>"""
+    
+    val RESULTS_HTML = """<html>
+	<head>
+		<title>Poll results for ${POLL_NAME}</title>
+	</head>	
+	<body>
+		<table>${RESULTS_TABLE}</table>
+		<img src="${CHART_URL}">
+	</body>
+</html>"""
 
+    val NO_POLL = """<html>
+	<head>
+		<title>Poll results</title>
+	<head>
+	<body>
+			<p>You need to provide a poll name.</p>
+    </body>
+</html>"""
 }
