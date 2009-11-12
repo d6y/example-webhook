@@ -31,7 +31,9 @@ class SingleVotePerMobilePollServlet extends PollTrait{
 		request.getParameter("name") match {
 		  case pollName:String =>
 			val pid =  request.getParameter("pid")
-			val pollOption:String = pollOptionFromString(request.getParameter("text"))
+            pollOptionFromString(request.getParameter("text")) match {
+	      	case None 			  => response.getWriter().println("You didn't say what you wanted to vote for!")
+            case Some(pollOption) =>  
 			if (hasntVoted(pollName,pid)) {
 			  recordVote(pollName,pid)
 			  polls.get(pollName) match{
@@ -45,7 +47,8 @@ class SingleVotePerMobilePollServlet extends PollTrait{
 					}
 			}
 			response.getWriter().println(sMSResponse(pollName, pollOption))
-			} else { response.getWriter().println("You can only vote once in the " + pollName + " poll.")}
+			} else { response.getWriter().println("You can only vote once in the " + pollName + " poll.")}              
+            }
 		  case null => response.getWriter().println("No poll name provided, contact Poll organiser")   
 		}
 
@@ -68,7 +71,11 @@ class SingleVotePerMobilePollServlet extends PollTrait{
 	  * E.g "pollOption we dont care what comes next" 
 	  * 
 	  */
-	override def pollOptionFromString(raw:String):String =  raw.split(" ")(0)
+	override def pollOptionFromString(raw:String):Option[String] = raw match {
+	  case null   => None
+	  case option => Some(option.split(" ")(0))
+	}
+   
 
  
 }

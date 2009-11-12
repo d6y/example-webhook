@@ -15,7 +15,12 @@ class DefinedOptionsPollServlet extends PollTrait {
 	  * E.g "pollOption we dont care what comes next" 
 	  * 
 	  */
-	override def pollOptionFromString(raw:String):String =  raw.split(" ")(0)
+	override def pollOptionFromString(raw:String):Option[String] = raw match {
+	  case null   => None
+	  case option => Some(option.split(" ")(0))
+	}
+   
+   
   
 }
  
