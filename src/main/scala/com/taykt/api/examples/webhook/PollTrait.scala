@@ -34,12 +34,12 @@ trait PollTrait  extends HttpServlet{
 	    else {
 			val pollOption:String = pollOptionFromString(request.getParameter("text"))
 			polls.get(pollName) match {
+			  case None => polls += (pollName -> Map(pollOption -> 1)) // new poll
 			  case Some(poll) =>  //existing poll
 			    poll.get(pollOption) match {
 			      case Some(value) => poll += (pollOption -> (value + 1))  // existing poll option 
 			      case None 	   => poll += (pollOption -> 1) 		   // new poll option  
 			    }
-			  case None => polls += (pollName -> Map(pollOption -> 1)) // new poll
 			}
 			response.getWriter().println(sMSResponse(pollName, pollOption))
 		}
