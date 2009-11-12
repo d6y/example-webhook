@@ -5,10 +5,25 @@ import javax.servlet.http.HttpServletResponse;
 
 import scala.collection.mutable.{Map, Set,SynchronizedMap,SynchronizedSet}
 
+/**
+ * A servlet to capture votes for Polls with defined voting options, which only
+ * allows one vote per mobile, per poll.
+ */
 class SingleVotePerMobilePollServlet extends PollTrait{
   
+    //Keep track of the customers who have voted for different polls.
   	val numbers = Map[String, Set[String]]()
 
+   
+	/**
+	  * Records votes and generates the response SMS message to send to the customer, allows a single vote per poll per mobile. 
+	  * 	  
+	  * Three parameters are expected :
+	  * <code>name</name> - the name of the poll 
+	  * <code>text</name> - the raw SMS message content from the customer
+	  * <code>pid</name>  - public identifier, a 36 character unique ID for the customers phone number.
+	  *	  
+	  */
  	override def doPost(request:HttpServletRequest , response:HttpServletResponse ) {
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("utf-8");
@@ -35,7 +50,8 @@ class SingleVotePerMobilePollServlet extends PollTrait{
 		}
 
 	}
- 
+	  
+    //  Checks if <code>pid</code> has voted in <code>pollName</code> Poll.
 	private def hasntVoted( pollName:String, id:String ):Boolean  = {
   		numbers.get(pollName) match {
   		  case None       =>  numbers.put(pollName, Set[String]());true
@@ -43,9 +59,15 @@ class SingleVotePerMobilePollServlet extends PollTrait{
   		}
 	}
 
-	private def recordVote(pollName:String , id:String) = { numbers(pollName) += id }
+    // Records that <code>pid</code> has voted in <code>pollName</code> Poll.
+	private def recordVote(pollName:String , pid:String) = { numbers(pollName) += pid }
  
-   	// we are expecting people to text "pollValue"
+	/**
+	  * Extract from the raw SMS response the value of the poll option, in this 
+      * case we want the first term.  
+	  * E.g "pollOption we dont care what comes next" 
+	  * 
+	  */
 	override def pollOptionFromString(raw:String):String =  raw.split(" ")(0)
 
  
