@@ -45,7 +45,6 @@ trait PollTrait  extends HttpServlet{
 			}
            response.getWriter().println(sMSResponse(pollName, pollOption))
 			}
-
 		}
 	} 
  
@@ -65,7 +64,7 @@ trait PollTrait  extends HttpServlet{
 		} else {
 			polls.get(pollName) match {
 			  case Some(poll) =>
-			    val table    = poll.map { entry => "<tr><td>" +  entry._1+ "</td><td>" + entry._2 + "</td><tr>" }.mkString
+			    val table    = poll.map { entry => "<tr><td>" +  entry._1+ "</td><td>" + entry._2 + "</td></tr>" }.mkString
 			    response.getWriter().println(
 			      RESULTS_HTML.replaceAll("POLL_NAME",pollName).replaceAll("RESULTS_TABLE", table).replaceAll("CHART_URL",chartUrl(poll)))
 			  case None =>  
