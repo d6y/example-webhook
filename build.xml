@@ -1,4 +1,5 @@
-<project name="Guestbook" default="runserver">
+<project name="Taykt API Examples" default="runserver">
+    <property file="etc/${user.name}.properties" />
     <property name="sdk.dir" location="/opt/appengine"/>
     <import file="${sdk.dir}/config/user/ant-macros.xml"/>
     <property name="war.dir" value="target/example-webhook"/>

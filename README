@@ -7,7 +7,8 @@ Prerequisites:
 
 To build:
 
-1. Edit build.xml and make sdk.dir point to your J/GAE install.
+1. Edit build.xml and make sdk.dir point to your J/GAE install; or create
+   an etc/user.properties file to customize this value (preferred option).
 2. Run mvn package
 3. Run ant
 
